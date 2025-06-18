@@ -27,3 +27,4 @@ Algorithm: Random Forest Classifier
 Library: scikit-learn
 
 Trained on the complete dataset for demonstration purposes.
+![image](https://github.com/user-attachments/assets/5c7cec02-7471-4354-9530-750723587927)
