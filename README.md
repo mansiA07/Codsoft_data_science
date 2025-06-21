@@ -89,3 +89,40 @@ model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
 ![image](https://github.com/user-attachments/assets/f9745467-36d6-4efe-a94a-142ea080226d)
 
+Project 3 :
+
+🚢 Titanic Survival Prediction with Streamlit
+This project uses machine learning to predict whether a passenger survived the Titanic disaster based on features like age, ticket class, sex, and more. It also includes an interactive Streamlit web app where users can input passenger details and get instant survival predictions.
+
+📌 Project Features
+Predicts survival using a Random Forest Classifier
+
+Interactive Streamlit app for real-time predictions
+
+Clean preprocessing pipeline using ColumnTransformer
+
+Feature inputs include:
+
+Passenger class (Pclass)
+
+Sex
+
+Age
+
+Siblings/Spouses aboard
+
+Parents/Children aboard
+
+Fare paid
+
+Embarkation port
+
+🧠 Tech Stack
+Component	Tools Used
+Language	Python
+ML Library	scikit-learn, pandas, numpy
+Web Framework	Streamlit
+Visualization	Streamlit widgets + prediction text
+Model Storage	joblib!
+[image](https://github.com/user-attachments/assets/8643c4bf-abdd-4a3f-a268-266800c210d9)
+
