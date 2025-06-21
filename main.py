@@ -1,61 +1,39 @@
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.datasets import imdb
-from tensorflow.keras.preprocessing import sequence
-from tensorflow.keras.models import load_model
-
-## load imdb dataset
-word_index=imdb.get_word_index()
-reverse_word_index={value:key for key,value in word_index.items()}
-model = load_model('simple_rnn_imdb.keras')
-
-
-# Step 2: Helper Functions
-# Function to decode reviews
-def decode_review(encoded_review):
-    return ' '.join([reverse_word_index.get(i - 3, '?') for i in encoded_review])
-
-# Function to preprocess user input
-def preprocess_text(text):
-    words = text.lower().split()
-    encoded_review = [word_index.get(word, 2) for word in words]
-    padded_review = sequence.pad_sequences([encoded_review], maxlen=500)
-    return padded_review
-
-
-### Prediction  function
-
-def predict_sentiment(review):
-    preprocessed_input=preprocess_text(review)
-
-    prediction=model.predict(preprocessed_input)
-
-    sentiment = 'Positive' if prediction[0][0] > 0.7 else 'Negative'
-    
-    return sentiment, prediction[0][0]
-
 import streamlit as st
-## stream lit app
-st.title('IMDB movie review sentiment analysis')
+import joblib
+import pandas as pd
 
-st.write('Enter a movie review to classify it as positive or negative.')
+# Load trained model
+model = joblib.load('titanic_model.pkl')
 
-## User input 
-user_input=st.text_area('Movie Review')
+st.title("🚢 Titanic Survival Prediction App")
+st.markdown("Enter passenger details to see if they would have survived:")
 
-if st.button('Classify'):
-    preprocessed_input=preprocess_text(user_input)
+# Input form
+pclass = st.selectbox("Ticket Class", [1, 2, 3], index=2)
+sex = st.selectbox("Sex", ['male', 'female'])
+age = st.slider("Age", 0, 100, 25)
+sibsp = st.number_input("Number of Siblings/Spouses Aboard", 0, 8, 0)
+parch = st.number_input("Number of Parents/Children Aboard", 0, 6, 0)
+fare = st.slider("Fare Paid", 0.0, 600.0, 50.0)
+embarked = st.selectbox("Port of Embarkation", ['S', 'C', 'Q'])
 
-    ## make prediction
+# Predict button
+if st.button("Predict Survival"):
+    # Create DataFrame with same column names as in training
+    input_df = pd.DataFrame({
+        'Pclass': [pclass],
+        'Sex': [sex],
+        'Age': [age],
+        'SibSp': [sibsp],
+        'Parch': [parch],
+        'Fare': [fare],
+        'Embarked': [embarked]
+    })
 
-    prediction=model.predict(preprocessed_input)
-    sentiment='Positive'if prediction[0][0]>0.5 else 'Negative'
+    prediction = model.predict(input_df)[0]
+    prob = model.predict_proba(input_df)[0][prediction]
 
-
-    ## display the result
-
-    st.write(f'Sentiment:{sentiment}')
-    st.write(f'Prediction:{prediction[0][0]}')
-else:
-    st.write('Please enter a movie review.')
-
+    if prediction == 1:
+        st.success(f"🎉 Survived! (Confidence: {prob:.2f})")
+    else:
+        st.error(f"💀 Did not survive. (Confidence: {prob:.2f})")
