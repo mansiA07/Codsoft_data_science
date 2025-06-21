@@ -87,6 +87,7 @@ model.add(Embedding(input_dim=vocab_size, output_dim=embedding_dim, input_length
 model.add(LSTM(units=64, return_sequences=False))
 model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
+```
 ![image](https://github.com/user-attachments/assets/f9745467-36d6-4efe-a94a-142ea080226d)
 
 Project 3 :
